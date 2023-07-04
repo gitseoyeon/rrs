@@ -2,7 +2,9 @@ package com.seoyeon.review.api;
 
 import com.seoyeon.review.api.request.CreateReviewRequest;
 import com.seoyeon.review.service.ReviewService;
+import com.seoyeon.review.service.dto.ReviewDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.CacheRequest;
@@ -20,5 +22,14 @@ public class ReviewApi {
     @DeleteMapping("/review/{reviewId}")
     public void deleteReview(@PathVariable("reviewId") Long reviewId){
         reviewService.deleteReview(reviewId);
+    }
+
+    @GetMapping("/restaurant/{restaurantId}/reviews")
+    public ReviewDto getRestaurantReviews(
+            @PathVariable("restaurantId") Long restaurantId,
+            @RequestParam("offset") Integer offset,
+            @RequestParam("limit") Integer limit
+    ){
+        return reviewService.getRestaurantReview(restaurantId, PageRequest.of(offset / limit, limit));
     }
 }
